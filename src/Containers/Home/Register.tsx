@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineLock, AiOutlineUser } from "react-icons/ai";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { RootState } from "../../app/store";
 import Button from "../../Components/UI/Inputs/Button";
 import Input from "../../Components/UI/Inputs/Input";
 import Snackbar from "../../Components/UI/Modals/Snackbar";
@@ -10,6 +12,10 @@ import { BASE_URL } from "../../config";
 import { login } from "../../Features/authSlice";
 
 const Register = () => {
+  const isAuthenticated = useSelector((state: RootState) => {
+    return state.user.token;
+  });
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,6 +31,12 @@ const Register = () => {
       password: "",
     });
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/panel");
+    }
+  });
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);

@@ -39,7 +39,7 @@
   }
 
   html {
-    @apply text-text_light;
+    @apply text-text_light bg-background_light;
   }
   /* 
   p {

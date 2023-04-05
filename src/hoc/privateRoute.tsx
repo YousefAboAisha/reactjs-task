@@ -9,7 +9,7 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   // Getting the isAuthenticated value from Redux
   const isAuthenticated = useSelector((state: RootState) => {
-    return state.user.isAuthenticated;
+    return state.user.token;
   });
 
   if (!isAuthenticated) {
