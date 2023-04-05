@@ -1,13 +1,114 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .abs-center {
+    @apply absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%];
+  }
+
+  .container {
+    @apply w-11/12 md:w-10/12 lg:w-9/12 mx-auto;
+  }
+
+  .section {
+    @apply relative w-full mt-32 mx-auto;
+  }
+
+  .grid-cards {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+
+  .image-clip {
+    clip-path: polygon(0 0, 100% 0%, 100% 100%, 0 91%);
+  }
+
+  .bg-theme {
+    @apply bg-background_light;
+  }
+
+  .text-theme {
+    @apply text-text_light;
+  }
+
+  .border-theme {
+    @apply border border-light;
+  }
+  .full-theme {
+    @apply bg-background_light text-text_light border border-light;
+  }
+
+  html {
+    @apply text-text_light;
+  }
+  /* 
+  p {
+    @apply text-[#222] dark:text-[#adb5bd];
+  } */
+
+  ::-webkit-scrollbar {
+    @apply w-1 h-[5px];
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-[50px];
+  }
+
+  /* Hidden scrollbar */
+  .hidden-scroll::-webkit-scrollbar {
+    @apply hidden;
+  }
+
+  /* Track */
+  .hidden-scroll::-webkit-scrollbar-track {
+    @apply bg-transparent hidden;
+  }
+
+  /* Handle */
+  .hidden-scroll::-webkit-scrollbar-thumb {
+    @apply hidden;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-roboto);
 }
+
+li {
+  list-style: none;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+select {
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+  padding-right: 5px;
+}
+
+/* Calendar styles  */
+
+/* 
+.react-multi-carousel-dot .react-multi-carousel-dot--active {
+  accent-color: pink !important;
+  color: red;
+} */
