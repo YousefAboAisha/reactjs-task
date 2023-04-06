@@ -77,6 +77,7 @@ const AddForm = ({ setIsOpen }: addFormType) => {
       console.log(data);
       emptyForm();
       setIsOpen(false);
+      window.location.reload();
     } catch (err) {
       console.log("Error", err);
       setLoading(false);
