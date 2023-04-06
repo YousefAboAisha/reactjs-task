@@ -3,11 +3,15 @@ import { FaUpload } from "react-icons/fa";
 
 type ImageUploaderProps = {
   onUpload: (file: File) => void;
+  initialURL?: string;
 };
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({
+  onUpload,
+  initialURL,
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(initialURL);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -17,8 +21,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
       const reader = new FileReader();
       reader.onload = () => {
         setImageUrl(reader.result as string);
-        const base64String = reader.result?.toString().split(";base64,")[1];
-        console.log("Base 64", base64String); // base64 string of the selected image
+        // console.log("Base 64", base64String); // base64 string of the selected image
       };
       reader.readAsDataURL(file);
     }
@@ -50,9 +53,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
       </label>
 
       <div className="relative w-32 h-32 rounded-lg border">
-        {imageUrl ? (
+        {initialURL || imageUrl ? (
           <img
-            src={imageUrl}
+            src={initialURL || imageUrl}
             alt="Selected file"
             className="w-32 h-32 rounded-lg z-20"
           />

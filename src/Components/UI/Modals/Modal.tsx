@@ -18,7 +18,7 @@ const Modal = ({
   return isOpen ? (
     <>
       <div
-        className={`fixed w-screen h-screen left-0 top-0 ${zIndex} ${bg} duration-300`}
+        className={`fixed w-full h-full left-0 top-0 ${zIndex} ${bg} duration-300`}
         onClick={() => setIsOpen(false)}
       ></div>
       {children}

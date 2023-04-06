@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import Button from "../../Components/UI/Inputs/Button";
 import Input from "../../Components/UI/Inputs/Input";
-import Snackbar from "../../Components/UI/Modals/Snackbar";
 import Heading from "../../Components/UI/Typography/Heading";
 import { BASE_URL } from "../../config";
 import ImageUploader from "./ImageUploader";
@@ -16,7 +15,6 @@ const AddForm = ({ setIsOpen }: addFormType) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [isActive, setIsActive] = useState(false);
   const [addForm, setAddForm] = useState({
     "name[en]": "",
     "name[ar]": "",
@@ -36,7 +34,7 @@ const AddForm = ({ setIsOpen }: addFormType) => {
           ...addForm,
           image: base64String,
         });
-      console.log("Base64 string:", base64String);
+      // console.log("Base64 string:", base64String);
     };
 
     reader.readAsDataURL(file);
@@ -58,7 +56,7 @@ const AddForm = ({ setIsOpen }: addFormType) => {
       formData.append(key, value);
     });
 
-    console.log(formData);
+    // console.log(formData);
 
     e.preventDefault();
     try {
@@ -77,14 +75,8 @@ const AddForm = ({ setIsOpen }: addFormType) => {
       setLoading(false);
       const data = await response.json();
       console.log(data);
-
-      setIsActive(true);
-      setTimeout(() => {
-        setIsActive(false);
-        emptyForm();
-      }, 4000);
-
-      //   setIsOpen(false);
+      emptyForm();
+      setIsOpen(false);
     } catch (err) {
       console.log("Error", err);
       setLoading(false);
@@ -94,13 +86,8 @@ const AddForm = ({ setIsOpen }: addFormType) => {
   return (
     <form
       onSubmit={(e) => submitHandler(e)}
-      className="abs-center fixed flex flex-col gap-2 bg-background_light p-6 rounded-lg w-11/12 md:w-9/12 lg:w-6/12 z-[100001]"
+      className="abs-center fixed flex flex-col gap-2 bg-background_light p-6 rounded-lg w-11/12 md:w-9/12 lg:w-6/12 z-[1000001]"
     >
-      <Snackbar
-        IsActive={isActive}
-        message={"You have successfully Added new item"}
-      />
-
       <Heading title="Add manufacturer" className="text-xl" />
       <ImageUploader onUpload={handleUpload} />
 

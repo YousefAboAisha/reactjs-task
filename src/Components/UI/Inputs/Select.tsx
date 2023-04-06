@@ -34,10 +34,11 @@ const Select = ({ title, options, icon, className, ...rest }: SelectProps) => {
         {...rest}
         onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
+        defaultValue={title}
       >
-        <option value="" disabled hidden selected>
+        {/* <option value="" disabled hidden selected>
           {title}
-        </option>
+        </option> */}
 
         {options.map((elem) => {
           return (
