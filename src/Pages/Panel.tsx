@@ -1,87 +1,63 @@
 import { useDeferredValue, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import Navbar from "../Components/Navbar";
 import Select from "../Components/UI/Inputs/Select";
 import Spinner from "../Components/UI/Utils/Spinner";
-import { BASE_URL } from "../config";
 import Header from "../Containers/Panel/header";
 import Pagination from "../Containers/Panel/Pagination";
 import Table from "../Containers/Panel/Table";
 import { PerPageData } from "../Data/perPageData";
+import { getManufacturer } from "../Features/getManufacturer";
 
 const Panel = () => {
   const token = useSelector((state: RootState) => {
     return state.user.token;
   });
 
+  const { loading, tableData, fetchedPageData } = useSelector(
+    (state: RootState) => ({
+      loading: state.get.loading,
+      tableData: state.get.tableData,
+      fetchedPageData: state.get.pageData,
+    })
+  );
+
+  const dispatch = useDispatch<any>();
+
   const [searchValue, setSearchValue] = useState("");
   const deferredInputValue = useDeferredValue(searchValue);
-
-  const [loading, setLoading] = useState(false);
-  const [tableData, setTableData] = useState([]);
-  const [pageData, setPageData] = useState({
-    currentPage: 1,
-    from: 1,
-    to: 20,
-    per_page: 10,
-    total: 10,
-  });
+  const [perPage, setperPage] = useState(10);
+  const [currentPage, setcurrentPage] = useState(1);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
   const handlePageChange = (page: number) => {
-    setPageData({
-      ...pageData,
-      currentPage: page,
-    });
+    setcurrentPage(page);
   };
 
   const fetchData = async () => {
-    setLoading(true);
-
-    try {
-      const response = await fetch(
-        `${BASE_URL}/vendor/manufacturers?per_page=${pageData.per_page}&search=${searchValue}`,
-        {
-          method: "GET", // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Accept-Language": "en",
-          },
-        }
-      );
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error("Network response was not ok");
-      }
-      setLoading(false);
-      const data = await response.json();
-      console.log(data.data);
-      if (data) {
-        setTableData(data.data);
-        setPageData({
-          ...pageData,
-          currentPage: data.pages.current_page,
-          from: data.pages.from,
-          per_page: data.pages.per_page,
-          total: data.pages.total,
-        });
-      }
-    } catch (err) {
-      console.log("Error", err);
-    } finally {
-      setLoading(false);
-    }
+    dispatch(
+      getManufacturer({
+        perPage,
+        searchValue,
+        token,
+      })
+    )
+      .then(() => {
+        console.log("Fetch success!");
+      })
+      .catch(() => {
+        console.log("Error Ocurred");
+      });
   };
 
   useEffect(() => {
     fetchData();
-  }, [pageData.per_page, deferredInputValue]);
-
-  console.log(pageData.per_page);
+  }, [perPage, deferredInputValue]);
 
   return (
     <>
@@ -102,19 +78,14 @@ const Panel = () => {
           <Select
             title="10"
             options={PerPageData}
-            onChange={(e) =>
-              setPageData({
-                ...pageData,
-                per_page: parseFloat(e.target.value),
-              })
-            }
+            onChange={(e) => setperPage(parseInt(e.target.value))}
             className="pl-4"
           />
         </div>
 
         <Pagination
-          currentPage={pageData.currentPage}
-          totalPages={pageData.total}
+          currentPage={currentPage}
+          totalPages={fetchedPageData.total}
           onPageChange={handlePageChange}
         />
       </div>

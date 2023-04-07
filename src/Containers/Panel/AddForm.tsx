@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import Button from "../../Components/UI/Inputs/Button";
 import Input from "../../Components/UI/Inputs/Input";
 import Heading from "../../Components/UI/Typography/Heading";
-import { BASE_URL } from "../../config";
+import { addManufacturer } from "../../Features/addManufacturerSlice";
 import ImageUploader from "./ImageUploader";
 
 type addFormType = { setIsOpen: Dispatch<SetStateAction<boolean>> };
@@ -14,7 +15,12 @@ const AddForm = ({ setIsOpen }: addFormType) => {
     return state.user.token;
   });
 
-  const [loading, setLoading] = useState(false);
+  const { loading } = useSelector((state: RootState) => ({
+    loading: state.add.loading,
+  }));
+
+  const dispatch = useDispatch<any>();
+
   const [addForm, setAddForm] = useState({
     "name[en]": "",
     "name[ar]": "",
@@ -22,7 +28,7 @@ const AddForm = ({ setIsOpen }: addFormType) => {
     image: "",
   });
 
-  const formData = new FormData();
+  // console.log(token);
 
   const handleUpload = (file: File) => {
     const reader = new FileReader();
@@ -50,43 +56,28 @@ const AddForm = ({ setIsOpen }: addFormType) => {
   };
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true);
+    e.preventDefault();
+
+    const formData = new FormData();
 
     Object.entries(addForm).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
-    // console.log(formData);
-
-    e.preventDefault();
-    try {
-      const response = await fetch(`${BASE_URL}/vendor/manufacturers`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
+    dispatch(addManufacturer({ formData, token }))
+      .then(() => {
+        emptyForm();
+        setIsOpen(false);
+        window.location.reload();
+      })
+      .catch(() => {
+        console.log("Error Ocurred");
       });
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error("Network response was not ok");
-      }
-
-      setLoading(false);
-      const data = await response.json();
-      console.log(data);
-      emptyForm();
-      setIsOpen(false);
-      window.location.reload();
-    } catch (err) {
-      console.log("Error", err);
-      setLoading(false);
-    }
   };
 
   return (
     <form
-      onSubmit={(e) => submitHandler(e)}
+      onSubmit={submitHandler}
       className="abs-center fixed flex flex-col gap-2 bg-background_light p-6 rounded-lg w-11/12 md:w-9/12 lg:w-6/12 z-[1000001]"
     >
       <Heading title="Add manufacturer" className="text-xl" />
@@ -133,10 +124,6 @@ const AddForm = ({ setIsOpen }: addFormType) => {
 
       <div className="mt-4 flex items-center gap-4">
         <Button title="Save changes" className="w-4/12" loading={loading} />
-        {/* <Button
-          title="Cancel"
-          className="bg-[#EEE] !text-text_light hover:bg-[#EEE] w-4/12"
-        /> */}
       </div>
     </form>
   );
