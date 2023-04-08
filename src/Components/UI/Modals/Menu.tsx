@@ -1,8 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { TbEdit, TbTrash } from "react-icons/tb";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { BASE_URL } from "../../../config";
+import {
+  deleteManufacturer,
+  resetDeleteManufacturerState,
+} from "../../../Features/deleteManufacturerSlice";
+import { getManufacturerDetails } from "../../../Features/getManufacturerDataSlice";
 
 type MenuType = {
   menuIsOpen: boolean;
@@ -16,29 +21,35 @@ const Menu = ({
   menuIsOpen,
   setMenuIsOpen,
   id,
-  setIsActive,
   setEditModalIsOpen,
 }: MenuType) => {
   const token = useSelector((state: RootState) => {
     return state.user.token;
   });
 
+  const dispatch = useDispatch<any>();
+
   const deleteRecord = () => {
-    fetch(`${BASE_URL}/vendor/manufacturers/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status) {
-          window.location.reload();
-          // console.log(data);
-        }
+    dispatch(deleteManufacturer({ id, token }))
+      .then(() => {
+        console.log("Deleteing success!");
+        setMenuIsOpen(false);
+        resetDeleteManufacturerState();
       })
-      .catch((error) => console.error(error));
+      .catch(() => {
+        console.log("Error Ocurred");
+      });
   };
+
+  // const fetchData = async () => {
+  //   dispatch(getManufacturerDetails({ id, token }))
+  //     .then(() => {
+  //       console.log("Fetching data success!");
+  //     })
+  //     .catch(() => {
+  //       console.log("Error Ocurred");
+  //     });
+  // };
 
   return (
     <div
@@ -54,6 +65,7 @@ const Menu = ({
           onClick={() => {
             setEditModalIsOpen(true);
             setMenuIsOpen(false);
+            // fetchData();
           }}
           className="flex items-center gap-2 text-md justify-between hover:bg-slate-100 p-3 cursor-pointer border-b"
         >

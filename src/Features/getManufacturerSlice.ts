@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useEffect } from "react";
 import { BASE_URL } from "../config";
 
 interface NameType {
@@ -24,6 +23,7 @@ interface PageData {
 
 interface ManufacturerState {
   loading: boolean;
+  success: boolean;
   tableData: Manufacturer[];
   pageData: PageData;
   error: string | null;
@@ -37,6 +37,7 @@ interface FetchDataArgs {
 
 const initialState: ManufacturerState = {
   loading: false,
+  success: false,
   tableData: [],
   pageData: {
     currentPage: 1,
@@ -47,7 +48,7 @@ const initialState: ManufacturerState = {
   error: null,
 };
 
-export const getManufacturer = createAsyncThunk(
+export const getManufacturers = createAsyncThunk(
   "manufacturer/fetchData",
   async ({ perPage, searchValue, token }: FetchDataArgs) => {
     const response = await fetch(
@@ -70,18 +71,27 @@ export const getManufacturer = createAsyncThunk(
   }
 );
 
-const manufacturerSlice = createSlice({
+const getManufacturerSlice = createSlice({
   name: "manufacturer",
   initialState,
-  reducers: {},
+  reducers: {
+    resetgetfacturersState: (state) => {
+      state.loading = false;
+      state.success = false;
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(getManufacturer.pending, (state) => {
+      .addCase(getManufacturers.pending, (state) => {
         state.loading = true;
+        state.success = false;
         state.error = null;
       })
-      .addCase(getManufacturer.fulfilled, (state, action) => {
+      .addCase(getManufacturers.fulfilled, (state, action) => {
         state.loading = false;
+        state.success = true;
+
         state.tableData = action.payload.data;
         state.pageData = {
           currentPage: action.payload.pages.current_page,
@@ -90,11 +100,14 @@ const manufacturerSlice = createSlice({
           total: action.payload.pages.total,
         };
       })
-      .addCase(getManufacturer.rejected, (state, action) => {
+      .addCase(getManufacturers.rejected, (state, action) => {
         state.loading = false;
+        state.success = false;
         state.error = action.error.message ?? "Unknown error";
       });
   },
 });
 
-export default manufacturerSlice.reducer;
+export const { resetgetfacturersState } = getManufacturerSlice.actions;
+
+export default getManufacturerSlice.reducer;

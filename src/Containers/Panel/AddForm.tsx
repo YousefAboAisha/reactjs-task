@@ -5,7 +5,10 @@ import { RootState } from "../../app/store";
 import Button from "../../Components/UI/Inputs/Button";
 import Input from "../../Components/UI/Inputs/Input";
 import Heading from "../../Components/UI/Typography/Heading";
-import { addManufacturer } from "../../Features/addManufacturerSlice";
+import {
+  addManufacturer,
+  resetAddManufacturerState,
+} from "../../Features/addManufacturersSlice";
 import ImageUploader from "./ImageUploader";
 
 type addFormType = { setIsOpen: Dispatch<SetStateAction<boolean>> };
@@ -46,15 +49,6 @@ const AddForm = ({ setIsOpen }: addFormType) => {
     reader.readAsDataURL(file);
   };
 
-  const emptyForm = () => {
-    setAddForm({
-      "name[en]": "",
-      "name[ar]": "",
-      sort: "",
-      image: "",
-    });
-  };
-
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -66,9 +60,9 @@ const AddForm = ({ setIsOpen }: addFormType) => {
 
     dispatch(addManufacturer({ formData, token }))
       .then(() => {
-        emptyForm();
+        console.log("Successfully added!");
         setIsOpen(false);
-        window.location.reload();
+        resetAddManufacturerState();
       })
       .catch(() => {
         console.log("Error Ocurred");
