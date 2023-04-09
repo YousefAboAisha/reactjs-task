@@ -40,6 +40,15 @@ const Panel = () => {
     return state.delete.success;
   });
 
+  // States will affect the fetch function
+  const effectState = [
+    perPage,
+    deferredInputValue,
+    editSuccess,
+    addSuccess,
+    deleteSuccess,
+  ];
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
@@ -67,7 +76,7 @@ const Panel = () => {
 
   useEffect(() => {
     fetchData();
-  }, [perPage, deferredInputValue, editSuccess, addSuccess, deleteSuccess]);
+  }, effectState);
 
   return (
     <>
@@ -75,7 +84,7 @@ const Panel = () => {
 
       <Header searchValue={searchValue} onChange={handleInputChange} />
 
-      <div className="relative container bg-white w-full rounded-md border min-h-[400px]">
+      <div className="relative container bg-white w-full rounded-md border h-fit min-h-[500px]">
         {loading ? (
           <Spinner additionalStyles="!absolute" />
         ) : (

@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import Button from "../../Components/UI/Inputs/Button";
 import Input from "../../Components/UI/Inputs/Input";
@@ -29,7 +28,7 @@ const EditForm = ({ setIsOpen, id }: addFormType) => {
   });
 
   const { editLoading } = useSelector((state: RootState) => ({
-    editLoading: state.edit.editLoading,
+    editLoading: state.edit.loading,
   }));
 
   const { loading } = useSelector((state: RootState) => ({

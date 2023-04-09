@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BASE_URL } from "../config";
 
 interface EditManufacturerState {
-  editLoading: boolean;
+  loading: boolean;
   success: boolean;
   error: string | undefined;
 }
@@ -23,7 +23,7 @@ interface EditManufacturerArgs {
 }
 
 const initialState: EditManufacturerState = {
-  editLoading: false,
+  loading: false,
   success: false,
   error: "",
 };
@@ -55,7 +55,7 @@ export const EditManufacturerSlice = createSlice({
   initialState,
   reducers: {
     resetEditManufacturerState: (state) => {
-      state.editLoading = false;
+      state.loading = false;
       state.success = false;
       state.error = "";
     },
@@ -63,14 +63,14 @@ export const EditManufacturerSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(EditManufacturer.pending, (state) => {
-        state.editLoading = true;
+        state.loading = true;
       })
       .addCase(EditManufacturer.fulfilled, (state) => {
-        state.editLoading = false;
+        state.loading = false;
         state.success = true;
       })
       .addCase(EditManufacturer.rejected, (state, action) => {
-        state.editLoading = false;
+        state.loading = false;
         state.error = action.error.message;
       });
   },

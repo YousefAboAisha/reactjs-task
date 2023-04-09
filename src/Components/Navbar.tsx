@@ -4,7 +4,7 @@ import { RoutesData } from "../Data/routesData";
 const Navbar = () => {
   return (
     <nav
-      className={`fixed w-full h-[60px] top-0 left-0 z-[10000] items-center bg-theme text-theme duration-500 shadow-md`}
+      className={`fixed w-full h-[60px] top-0 left-0 z-10 items-center bg-theme text-theme duration-500 shadow-md`}
     >
       <div className="container flex flex-row justify-between items-center h-full">
         <div

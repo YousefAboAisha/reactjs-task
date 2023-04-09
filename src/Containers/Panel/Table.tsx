@@ -20,8 +20,8 @@ type TableProps = {
 const Table = ({ tableData }: TableProps) => {
   return (
     <>
-      <table className=" w-full text-sm text-left text-gray-500 rounded-lg">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+      <table className="w-full text-sm text-left text-gray-500 rounded-lg ">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-200">
           <tr className="h-14">
             <th scope="col" className="px-6 py-3 text-center">
               Manufacturer
