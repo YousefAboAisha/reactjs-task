@@ -60,19 +60,18 @@ export const EditManufacturerSlice = createSlice({
       state.error = "";
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(EditManufacturer.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(EditManufacturer.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
-      })
-      .addCase(EditManufacturer.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+  extraReducers: {
+    [EditManufacturer.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [EditManufacturer.fulfilled.type]: (state) => {
+      state.loading = false;
+      state.success = true;
+    },
+    [EditManufacturer.rejected.type]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
   },
 });
 

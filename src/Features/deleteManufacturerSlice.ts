@@ -47,21 +47,20 @@ export const DeleteManufacturerSlice = createSlice({
       state.error = "";
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(deleteManufacturer.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-      })
-      .addCase(deleteManufacturer.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
-      })
-      .addCase(deleteManufacturer.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.error.message;
-      });
+  extraReducers: {
+    [deleteManufacturer.pending.type]: (state) => {
+      state.loading = true;
+      state.success = false;
+    },
+    [deleteManufacturer.fulfilled.type]: (state) => {
+      state.loading = false;
+      state.success = true;
+    },
+    [deleteManufacturer.rejected.type]: (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.error = action.error.message;
+    },
   },
 });
 

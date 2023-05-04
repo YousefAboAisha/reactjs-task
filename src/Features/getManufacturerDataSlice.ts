@@ -78,34 +78,23 @@ const getManufacturerData = createSlice({
       state.error = "";
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getManufacturerDetails.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-      })
-      .addCase(getManufacturerDetails.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
+  extraReducers: {
+    [getManufacturerDetails.pending.type]: (state) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
+    },
+    [getManufacturerDetails.fulfilled.type]: (state) => {
+      state.loading = false;
+      state.success = true;
+      state.error = null;
+    },
 
-        // Its been set in the fetch requst
-
-        // state.fetchedData = {
-        //   name: {
-        //     ar: action.payload.data.name.ar,
-        //     en: action.payload.data.name.en,
-        //   },
-        //   image: action.payload.data.image,
-        //   sort: action.payload.data.sort_order,
-        // };
-      })
-      .addCase(getManufacturerDetails.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.error.message ?? "Unknown error";
-      });
+    [getManufacturerDetails.rejected.type]: (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.error = action.error.message ?? "Unknown error";
+    },
   },
 });
 

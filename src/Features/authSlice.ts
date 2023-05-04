@@ -34,21 +34,20 @@ const authSlice = createSlice({
     error: false,
   },
   reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = true;
-        localStorage.setItem("token", action.payload);
-        state.token = action.payload;
-      })
-      .addCase(login.rejected, (state) => {
-        state.loading = false;
-        state.error = true;
-      });
+  extraReducers: {
+    [login.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [login.fulfilled.type]: (state, action) => {
+      state.loading = false;
+      state.isAuthenticated = true;
+      localStorage.setItem("token", action.payload);
+      state.token = action.payload;
+    },
+    [login.rejected.type]: (state) => {
+      state.loading = false;
+      state.error = true;
+    },
   },
 });
 

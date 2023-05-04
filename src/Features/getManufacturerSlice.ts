@@ -81,30 +81,30 @@ const getManufacturerSlice = createSlice({
       state.error = "";
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getManufacturers.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-      })
-      .addCase(getManufacturers.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
+  extraReducers: {
+    [getManufacturers.pending.type]: (state) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
+    },
+    [getManufacturers.fulfilled.type]: (state, action) => {
+      state.loading = false;
+      state.success = true;
 
-        state.tableData = action.payload.data;
-        state.pageData = {
-          currentPage: action.payload.pages.current_page,
-          from: action.payload.pages.from,
-          per_page: action.payload.pages.per_page,
-          total: action.payload.pages.total,
-        };
-      })
-      .addCase(getManufacturers.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.error.message ?? "Unknown error";
-      });
+      state.tableData = action.payload.data;
+      state.pageData = {
+        currentPage: action.payload.pages.current_page,
+        from: action.payload.pages.from,
+        per_page: action.payload.pages.per_page,
+        total: action.payload.pages.total,
+      };
+    },
+
+    [getManufacturers.rejected.type]: (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.error = action.error.message ?? "Unknown error";
+    },
   },
 });
 
